@@ -3,6 +3,7 @@
 #----------------------------------------------------------------------------#
 
 import json
+from os import name
 import dateutil.parser
 import babel
 from flask import Flask, render_template, request, Response, flash, redirect, url_for
@@ -11,7 +12,9 @@ from flask_sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
 from flask_wtf import Form
+from sqlalchemy.orm import backref
 from forms import *
+from flask_migrate import Migrate
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
@@ -22,6 +25,7 @@ app.config.from_object('config')
 db = SQLAlchemy(app)
 
 # TODO: connect to a local postgresql database
+migrate = Migrate(app,db)
 
 #----------------------------------------------------------------------------#
 # Models.
@@ -32,12 +36,18 @@ class Venue(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
+    genres = db.Column(db.String)
     city = db.Column(db.String(120))
     state = db.Column(db.String(120))
     address = db.Column(db.String(120))
     phone = db.Column(db.String(120))
+    website = db.Column(db.String(120))
+    seeking_talent = db.Column(db.Boolean)
+    seeking_description = db.Column(db.String(500))
     image_link = db.Column(db.String(500))
-    facebook_link = db.Column(db.String(120))
+    facebook_link = db.Column(db.String(120)) 
+    upcoming_shows = db.relationship('Show', backref='show_up', lazy = True)
+    past_shows = db.relationship('Show', backref='show_past', lazy = True)
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
@@ -46,12 +56,29 @@ class Artist(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
+    genres = db.Column(db.String)
     city = db.Column(db.String(120))
     state = db.Column(db.String(120))
     phone = db.Column(db.String(120))
+    website = db.Column(db.String(120))
+    seeking_venue = db.Column(db.Boolean)
+    seeking_description = db.Column(db.String(500))
     genres = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+    upcoming_shows = db.relationship('Show', backref='show_up', lazy=True)
+    past_shows = db.relationship('Show', backref='show_past', lazy=True)
+
+class Show(db.Model):
+  __tablename__ = 'Show'
+
+  id = db.Column(db.Integer, primary_key=True)
+  artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'), nullable=False)
+  venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id'), nullable=False)
+  start_time = db.Column(db.DateTime, nullable=False)
+
+
+
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
@@ -220,8 +247,12 @@ def create_venue_form():
 @app.route('/venues/create', methods=['POST'])
 def create_venue_submission():
   # TODO: insert form data as a new Venue record in the db, instead
+  form = VenueForm()
+  venue = Venue(name=form.name, city=form.city, state=form.state, address=form.address, phone=form.phone, image_link=form.image_link, genres=form.genres, facebook_link=form.facebook_link, website_link=form.website_link, seeking_talent=form.seeking_talent, seeking_description=form.seeking_description)
+  db.session.add(venue)
+  db.session.commit()
   # TODO: modify data to be the data object returned from db insertion
-
+  return 
   # on successful db insert, flash success
   flash('Venue ' + request.form['name'] + ' was successfully listed!')
   # TODO: on unsuccessful db insert, flash an error instead.
