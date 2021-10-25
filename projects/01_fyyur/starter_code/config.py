@@ -11,3 +11,9 @@ DEBUG = True
 
 # TODO IMPLEMENT DATABASE URL
 SQLALCHEMY_DATABASE_URI = 'postgresql://naomiradke@localhost:5432/fyyur'
+
+# Print SQL querion on the terminal
+SQLALCHEMY_ECHO = True
+
+# Disable track modification to avoid overhead
+SQLALCHEMY_TRACK_MODIFICATIONS = False
