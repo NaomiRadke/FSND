@@ -29,10 +29,21 @@ class TriviaTestCase(unittest.TestCase):
         """Executed after reach test"""
         pass
 
-    """
-    TODO
-    Write at least one test for each test for successful operation and for expected errors.
-    """
+    #------------------------------------------------------------------------------------
+    # TESTS
+    #------------------------------------------------------------------------------------
+
+    def test_get_categories(self):
+        res = self.client().get('/categories')
+        data = json.loads(res.data) 
+
+        self.assertEqual(res.status_code, 200) # Check that status code is 200
+        self.assertEqual(data['success'], True) # Check that the success of the body is true
+        self.assertTrue(data['categories']) # Check that there are categories in the list
+
+    def test_404_sent_requesting_beyond_valid_page(self):  # Test that 404 is sent if we request beyond a valid page
+        res = self.client().get()
+
 
 
 # Make the tests conveniently executable
