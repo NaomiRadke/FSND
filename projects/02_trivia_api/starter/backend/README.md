@@ -85,7 +85,10 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 - Request arguments: None
 - Returns: A dictionary of categories with id:type key value pair. 
 - Sample Request: `curl -X GET localhost:5000/categories`
-- Sample Response: "categories":{ '1' : "Science", '2' : "Art", '3' : "Geography", '4' : "History", '5' : "Entertainment", '6' : "Sports" }, "success":true,
+- Sample Response: 
+```bash
+"categories":{ '1' : "Science", '2' : "Art", '3' : "Geography", '4' : "History", '5' : "Entertainment", '6' : "Sports" }, "success":true,
+```
 
 
 **GET '/questions'**
@@ -96,7 +99,7 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 - Sample Request: `curl -X GET http://127.0.0.1:5000/categories
 - Sample Response: 
 
-````
+```bash
 {
   "categories": {
     "1": "Science", 
@@ -147,7 +150,7 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 - Sample Request: `curl -X GET http://127.0.0.1:5000/categories/3/questions`
 - Sample Response: 
 
-````
+```bash
 {
   "current_category": "Geography", 
   "questions": [
@@ -169,7 +172,7 @@ One note before you delve into your tasks: for each endpoint, you are expected t
   "success": true, 
   "total_questions": 2
 }
-````
+```
 
 **POST '/questions/add'**
 
@@ -184,19 +187,54 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 - Search for questions based on a search term
 - Request arguments: search term
 - Returns: Questions that match the search term. 
-- Sample Request: curl -X POST localhost:5000/questions/search "searchTerm":"world cup" 
-- Sample Response: "questions": [ { "answer": "Brazil", "category": 6, "difficulty": 3, "id": 10, "question": "Which is the only team to play in every soccer World Cup tournament?" }, { "answer": "Uruguay", "category": 6, "difficulty": 4, "id": 11, "question": "Which country won the first ever soccer World Cup in 1930?" } ], "success": true
+- Sample Request: `curl -X POST http://127.0.0.1:5000/questions/search -H "Content-Type: application/json" -d '{"searchTerm":"movie"}'`
+- Sample Response: 
+```bash
+{
+  "questions": [
+    {
+      "answer": "Apollo 13", 
+      "category": 5, 
+      "difficulty": 4, 
+      "id": 2, 
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 1
+}
+```
 
 **DELETE '/questions/<qn_id>'**
 
-Deletes the specified question
-Request argument: question id
-Returns: Result of the request Sample Request: localhost:5000/questions/1 Sample Response: "success":true
-GET '/quizzes'
+- Deletes the question of a given id
+- Request argument: question id
+- Returns: Result of the request 
+- Sample Request: `curl -X DELETE http://127.0.0.1:5000/questions/2`
+- Sample Response: `{"deleted": 2, "success": true}`
 
-Randomly fetches a question from the specified category. If no category is specified, the question will be fetched from any category.
-Request argument: Previous questions, quiz category
-Returns: Question with answer and difficulty level Sample Request: localhost:5000/quizzes "previous_questions":[1,2,3], "quiz_category":{ "id":1 } Sample Response: question": { "answer": "Alexander Fleming", "category": 1, "difficulty": 3, "id": 21, "question": "Who discovered penicillin?" }, "success": true
+
+**POST '/quizzes'**
+
+- Randomly fetches a question from a specified category. If no category is specified.
+- Request argument: Previous questions, quiz category
+- Returns: Question with answer and difficulty level 
+- Sample Request: `curl -X POST http://127.0.0.1:5000/quizzes -H "Content-Type: application/json" -d '{"quiz_category": {"type": "History", "id": 4}, "previous_questions":[2]}'`
+- Sample Response: question": 
+```bash
+{
+  "question": {
+    "answer": "George Washington Carver", 
+    "category": 4, 
+    "difficulty": 2, 
+    "id": 12, 
+    "question": "Who invented Peanut Butter?"
+  }, 
+  "success": true
+}
+````
+
+
 
 
 
