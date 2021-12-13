@@ -136,7 +136,7 @@ One note before you delve into your tasks: for each endpoint, you are expected t
       "id": 10, 
       "question": "Which is the only team to play in every soccer World Cup tournament?"
     }, 
-    ````
+    ```
 
 
 **GET '/categories/<cat_id>/questions'**
