@@ -91,10 +91,8 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 - Fetches an array of questions in the current category, their answer, category, difficulty and id.
 - Request arguments: None
 - Returns: List of categories, current category, number of total questions in the current category and an array of all questions in the current category. 
-- Sample Request: curl -X GET http://127.0.0.1:5000/categories
+- Sample Request: `curl -X GET http://127.0.0.1:5000/categories`
 - Sample Response: 
-
-```
 {
   "categories": {
     "1": "Science", 
