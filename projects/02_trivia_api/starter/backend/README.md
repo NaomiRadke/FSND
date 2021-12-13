@@ -77,28 +77,126 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 
 
 
-## Review Comment to the Students
-```
-This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
+## Endpoints
 
-Endpoints
-GET '/api/v1.0/categories'
-GET ...
-POST ...
-DELETE ...
+**GET '/categories'**
 
-GET '/api/v1.0/categories'
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
-{'1' : "Science",
-'2' : "Art",
-'3' : "Geography",
-'4' : "History",
-'5' : "Entertainment",
-'6' : "Sports"}
+- Fetches a list of categories in which the keys are the ids and the value is the corresponding string of the category
+- Request arguments: None
+- Returns: A dictionary of categories with id:type key value pair. Sample Request: localhost:5000/categories Sample Response: "categories":{ '1' : "Science", '2' : "Art", '3' : "Geography", '4' : "History", '5' : "Entertainment", '6' : "Sports" }, "success":true,
+
+
+**GET '/questions'**
+
+- Fetches an array of questions in the current category, their answer, category, difficulty and id.
+- Request arguments: None
+- Returns: List of categories, current category, number of total questions in the current category and an array of all questions in the current category. 
+- Sample Request: curl -X GET http://127.0.0.1:5000/categories
+- Sample Response: 
 
 ```
+{
+  "categories": {
+    "1": "Science", 
+    "2": "Art", 
+    "3": "Geography", 
+    "4": "History", 
+    "5": "Entertainment", 
+    "6": "Sports"
+  }, 
+  "current_category": "Sports", 
+  "questions": [
+    {
+      "answer": "Apollo 13", 
+      "category": 5, 
+      "difficulty": 4, 
+      "id": 2, 
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }, 
+    {
+      "answer": "Tom Cruise", 
+      "category": 5, 
+      "difficulty": 4, 
+      "id": 4, 
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+    }, 
+    {
+      "answer": "Edward Scissorhands", 
+      "category": 5, 
+      "difficulty": 3, 
+      "id": 6, 
+      "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+    }, 
+    {
+      "answer": "Brazil", 
+      "category": 6, 
+      "difficulty": 3, 
+      "id": 10, 
+      "question": "Which is the only team to play in every soccer World Cup tournament?"
+    }, 
+    ```
+
+
+**GET '/categories/<cat_id>/questions'**
+
+- Fetches an array of questions in the specified category, with their answers and difficulty levels.
+- Request arguments: category id
+- Returns: Current category, number of questions in the current category and an array of all questions in the current category. 
+- Sample Request: `curl -X GET http://127.0.0.1:5000/categories/3/questions`
+- Sample Response: 
+
+```
+{
+  "current_category": "Geography", 
+  "questions": [
+    {
+      "answer": "George Washington Carver", 
+      "category": 4, 
+      "difficulty": 2, 
+      "id": 12, 
+      "question": "Who invented Peanut Butter?"
+    }, 
+    {
+      "answer": "Scarab", 
+      "category": 4, 
+      "difficulty": 4, 
+      "id": 23, 
+      "question": "Which dung beetle was worshipped by the ancient Egyptians?"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 2
+}
+```
+
+**POST '/questions/add'**
+
+- Adds a new question to the list of questions in frontend and database
+- Request arguments: Question, category, answer and difficulty level
+- Returns: Result of the request 
+- Sample Request: `curl -X POST http://127.0.0.1:5000/questions -H "Content-Type: application/json" -d '{ "question":"new?", "answer":"this", "difficulty":3, "category":2}'` 
+- Sample Response: "success":true
+
+**POST '/questions/search'**
+
+- Search for questions based on a search term
+- Request arguments: search term
+- Returns: Questions that match the search term. 
+- Sample Request: curl -X POST localhost:5000/questions/search "searchTerm":"world cup" 
+- Sample Response: "questions": [ { "answer": "Brazil", "category": 6, "difficulty": 3, "id": 10, "question": "Which is the only team to play in every soccer World Cup tournament?" }, { "answer": "Uruguay", "category": 6, "difficulty": 4, "id": 11, "question": "Which country won the first ever soccer World Cup in 1930?" } ], "success": true
+
+**DELETE '/questions/<qn_id>'**
+
+Deletes the specified question
+Request argument: question id
+Returns: Result of the request Sample Request: localhost:5000/questions/1 Sample Response: "success":true
+GET '/quizzes'
+
+Randomly fetches a question from the specified category. If no category is specified, the question will be fetched from any category.
+Request argument: Previous questions, quiz category
+Returns: Question with answer and difficulty level Sample Request: localhost:5000/quizzes "previous_questions":[1,2,3], "quiz_category":{ "id":1 } Sample Response: question": { "answer": "Alexander Fleming", "category": 1, "difficulty": 3, "id": 21, "question": "Who discovered penicillin?" }, "success": true
+
+
 
 
 ## Testing
