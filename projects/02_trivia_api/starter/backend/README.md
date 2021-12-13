@@ -83,7 +83,9 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 
 - Fetches a list of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request arguments: None
-- Returns: A dictionary of categories with id:type key value pair. Sample Request: localhost:5000/categories Sample Response: "categories":{ '1' : "Science", '2' : "Art", '3' : "Geography", '4' : "History", '5' : "Entertainment", '6' : "Sports" }, "success":true,
+- Returns: A dictionary of categories with id:type key value pair. 
+- Sample Request: `curl -X GET localhost:5000/categories`
+- Sample Response: "categories":{ '1' : "Science", '2' : "Art", '3' : "Geography", '4' : "History", '5' : "Entertainment", '6' : "Sports" }, "success":true,
 
 
 **GET '/questions'**
@@ -91,10 +93,10 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 - Fetches an array of questions in the current category, their answer, category, difficulty and id.
 - Request arguments: None
 - Returns: List of categories, current category, number of total questions in the current category and an array of all questions in the current category. 
-- Sample Request: curl -X GET http://127.0.0.1:5000/categories
+- Sample Request: `curl -X GET http://127.0.0.1:5000/categories
 - Sample Response: 
 
-```
+````
 {
   "categories": {
     "1": "Science", 
@@ -134,7 +136,7 @@ One note before you delve into your tasks: for each endpoint, you are expected t
       "id": 10, 
       "question": "Which is the only team to play in every soccer World Cup tournament?"
     }, 
-    ```
+    ````
 
 
 **GET '/categories/<cat_id>/questions'**
@@ -145,7 +147,7 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 - Sample Request: `curl -X GET http://127.0.0.1:5000/categories/3/questions`
 - Sample Response: 
 
-```
+````
 {
   "current_category": "Geography", 
   "questions": [
@@ -167,7 +169,7 @@ One note before you delve into your tasks: for each endpoint, you are expected t
   "success": true, 
   "total_questions": 2
 }
-```
+````
 
 **POST '/questions/add'**
 
@@ -175,7 +177,7 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 - Request arguments: Question, category, answer and difficulty level
 - Returns: Result of the request 
 - Sample Request: `curl -X POST http://127.0.0.1:5000/questions -H "Content-Type: application/json" -d '{ "question":"new?", "answer":"this", "difficulty":3, "category":2}'` 
-- Sample Response: "success":true
+- Sample Response: `"success":true`
 
 **POST '/questions/search'**
 
