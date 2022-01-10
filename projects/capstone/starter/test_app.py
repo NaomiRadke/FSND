@@ -24,6 +24,8 @@ class CapstoneTestCase(unittest.TestCase):
             self.db.init_app(self.app)
             # create all tables
             self.db.create_all()
+
+        
     
     def tearDown(self):
         """Executed after each test"""
