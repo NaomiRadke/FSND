@@ -27,8 +27,11 @@ python3 app.py
 psql postgres < db.sql
 `````
 
-* Create database for testing the app
+* Create JWT Tokens
+
+* Create database for testing the app and run test
 ````
 createdb capstone_test
 psql capstone_test < db.sql
+python test_app.py
 ````

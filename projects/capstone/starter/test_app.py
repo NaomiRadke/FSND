@@ -15,7 +15,9 @@ class CapstoneTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "capstone_test"
-        self.database_path = "postgres://{}/{}".format('localhost:5432', self.database_name)
+        self.database_path = "postgresql://{}/{}".format('localhost:5432', self.database_name)
+        self.token_cd = os.environ['TOKEN_CD']
+        self.token_e = os.environ['TOKEN_E']
         setup_db(self.app, self.database_path)
 
         # binds the app to the current context
@@ -49,7 +51,9 @@ class CapstoneTestCase(unittest.TestCase):
 
     # Delete actor with id 'actor_id'
     def test_delete_actor(self):
-        res = self.client().delete('actor/2') # Delete actor with actor_id=2
+        res = self.client().delete('actor/2', headers={'Authorization': 'Bearer {}'.format(
+                                       self.token_cd)
+                                   }) # Delete actor with actor_id=2
         data = json.loads(res.data)
 
         actor = Actors.query.filter(Actors.id == 2).one_or_none() # Check tat the question is no longer in the database
@@ -116,7 +120,7 @@ class CapstoneTestCase(unittest.TestCase):
     # Test casting director role authorization
     def test_401_post_actor(self):
         res = self.client().post('/actors', json={'name': 'Hello Kitty', 'age':10, 'gender':'m'}, headers={
-            "Authorization": "Bearer {}".format(self.TOKEN_CD)})
+            "Authorization": "Bearer {}".format(self.token_cd)})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -125,7 +129,7 @@ class CapstoneTestCase(unittest.TestCase):
 
     def test_401_delete_actor(self):
         res = self.client().delete('/actors/2', headers={
-            "Authorization": "Bearer {}".format(self.TOKEN_CD)})
+            "Authorization": "Bearer {}".format(self.token_cd)})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -136,7 +140,7 @@ class CapstoneTestCase(unittest.TestCase):
     # Test executive role authorization
     def test_401_post_movie(self):
         res = self.client().post('/movies', json={'title': 'Hello Kitty'}, headers={
-            "Authorization": "Bearer {}".format(self.TOKEN_E)})
+            "Authorization": "Bearer {}".format(self.token_e)})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -145,9 +149,14 @@ class CapstoneTestCase(unittest.TestCase):
 
     def test_401_delete_movie(self):
         res = self.client().delete('/movies/2', headers={
-            "Authorization": "Bearer {}".format(self.TOKEN_E)})
+            "Authorization": "Bearer {}".format(self.token_e)})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message', 'JWT not found'])
+
+
+# Make the tests conveniently executable
+if __name__ == "__main__":
+    unittest.main()
