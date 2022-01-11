@@ -6,8 +6,8 @@ import json
 
 
 database_path = os.environ['DATABASE_URL']
-# if database_path.startswith("postgres://"):
-#   database_path = database_path.replace("postgres://", "postgresql://", 1)
+if database_path.startswith("postgres://"):
+  database_path = database_path.replace("postgres://", "postgresql://", 1)
 
 db = SQLAlchemy()
 
@@ -25,7 +25,7 @@ def setup_db(app, database_path=database_path):
 # ---------------------------------------------------------------------------
 
 class Movies(db.Model):  
-  __tablename__ = 'Movies'
+  __tablename__ = 'movies'
 
   id = db.Column(db.Integer, primary_key=True)
   title = db.Column(db.String)
@@ -42,7 +42,7 @@ class Movies(db.Model):
       'release_date': self.release_date}
 
 class Actors(db.Model):
-    __tablename__ = 'Actors'
+    __tablename__ = 'actors'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)

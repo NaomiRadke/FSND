@@ -14,7 +14,7 @@ class CapstoneTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-        self.database_name = "capstone_test"
+        self.database_name = "capstone"
         self.database_path = "postgresql://{}/{}".format('localhost:5432', self.database_name)
         self.token_cd = os.environ['TOKEN_CD']
         self.token_e = os.environ['TOKEN_E']
@@ -38,7 +38,7 @@ class CapstoneTestCase(unittest.TestCase):
     #------------------------------------------------------------------------------------
 
     # Get all available actors (paginated)
-    def test_get_paginated_actors(self):
+    def test_get_actors(self):
         res = self.client().get('/actors')
         data = json.loads(res.data)
 
@@ -46,8 +46,6 @@ class CapstoneTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True) # Check that the success of the body is true
         self.assertTrue(data['actors']) # Check that there are actors in the list
 
-    def test_404_sent_requesting_beyond_valid_page(self):
-        res = self.client().get('/actors?page=10000')
 
     # Delete actor with id 'actor_id'
     def test_delete_actor(self):
@@ -56,15 +54,16 @@ class CapstoneTestCase(unittest.TestCase):
                                    }) # Delete actor with actor_id=2
         data = json.loads(res.data)
 
-        actor = Actors.query.filter(Actors.id == 2).one_or_none() # Check tat the question is no longer in the database
+        actor = Actors.query.filter(Actors.id == 2).one_or_none() # Check that the question is no longer in the database
         
-        self.assertEqual(res.status.code, 200)
+        self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success', True])
         self.assertTrue(data['deleted'])
         self.assertEqual(actor, None) # Check that actor no longer exists
 
     def test_404_actor_does_not_exist(self):
-        res = self.client().delete('/actors/10000')
+        res = self.client().delete('/actors/10000', headers={
+            "Authorization": "Bearer {}".format(self.token_cd)})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -73,7 +72,8 @@ class CapstoneTestCase(unittest.TestCase):
 
     # Post new actor
     def test_create_new_actor(self):
-        res = self.client().post('/actors', json={'name': 'Hello Kitty', 'age': 10, 'gender': 'f'})
+        res = self.client().post('/actors', json={'name': 'Hello Kitty', 'age': 10, 'gender': 'f'}, headers={
+            "Authorization": "Bearer {}".format(self.token_cd)})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -92,7 +92,8 @@ class CapstoneTestCase(unittest.TestCase):
     
     # Update (patch) actor with id 'actor_id'
     def test_update_actor(self):
-        res = self.client().patch('/actors/2', json={'name': 'Hello Kitty', 'age':10, 'gender':'m'})
+        res = self.client().patch('/actors/2', json={'name': 'Hello Kitty', 'age':10, 'gender':'m'}, headers={
+            "Authorization": "Bearer {}".format(self.token_e)})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -116,45 +117,6 @@ class CapstoneTestCase(unittest.TestCase):
 
     # Update (patch) movie with id 'movie_id'
 
-
-    # Test casting director role authorization
-    def test_401_post_actor(self):
-        res = self.client().post('/actors', json={'name': 'Hello Kitty', 'age':10, 'gender':'m'}, headers={
-            "Authorization": "Bearer {}".format(self.token_cd)})
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 401)
-        self.assertEqual(data['success'], False)
-        self.assertEqual(data['message', 'JWT not found'])
-
-    def test_401_delete_actor(self):
-        res = self.client().delete('/actors/2', headers={
-            "Authorization": "Bearer {}".format(self.token_cd)})
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 401)
-        self.assertEqual(data['success'], False)
-        self.assertEqual(data['message', 'JWT not found'])
-        
-
-    # Test executive role authorization
-    def test_401_post_movie(self):
-        res = self.client().post('/movies', json={'title': 'Hello Kitty'}, headers={
-            "Authorization": "Bearer {}".format(self.token_e)})
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 401)
-        self.assertEqual(data['success'], False)
-        self.assertEqual(data['message', 'JWT not found'])
-
-    def test_401_delete_movie(self):
-        res = self.client().delete('/movies/2', headers={
-            "Authorization": "Bearer {}".format(self.token_e)})
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 401)
-        self.assertEqual(data['success'], False)
-        self.assertEqual(data['message', 'JWT not found'])
 
 
 # Make the tests conveniently executable

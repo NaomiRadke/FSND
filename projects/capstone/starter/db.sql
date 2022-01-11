@@ -162,4 +162,3 @@ ALTER TABLE ONLY public.movies
 --
 -- PostgreSQL database dump complete
 --
-

@@ -2,41 +2,32 @@ import os
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from models import *
+from models import setup_db, Actors, Movies
 from auth import requires_auth, AuthError
-
-
-# Methods for paginating movies and actors
-ENTRIES_PER_PAGE = 10 # Set maximum # of entries per page
-
-# Paginating actors
-def paginate_actors(request, result):
-  page = request.args.get('page', 1, type=int)
-  start = (page - 1) * ENTRIES_PER_PAGE
-  end = start + ENTRIES_PER_PAGE
-  
-  actors = [actor.format() for actor in result]
-  current_actors = actors[start:end]
-
-  return current_actors
-
-# Paginating movies
-def paginate_movies(request, result):
-  page = request.args.get('page', 1, type=int)
-  start = (page - 1) * ENTRIES_PER_PAGE
-  end = start + ENTRIES_PER_PAGE
-  
-  movies = [movie.format() for movie in result]
-  current_movies = movies[start:end]
-
-  return current_movies
 
 
 
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
+  setup_db(app)
+
+  # set up CORS, allow '*' for origins
   CORS(app)
+  cors = CORS(app, resources={r"*": {"origins": "*"}})
+
+  @app.after_request
+  def after_request(response):
+      response.headers.add(
+          'Access-Control-Allow-Headers',
+          'Content-Type,Authorization'
+      )
+      response.headers.add(
+          'Access-Control-Allow-Methods',
+          'GET,POST,PATCH,DELETE,OPTIONS'
+      )
+      return response
+
 
   # Endpoints
   # -----------------------------------------------------------------
@@ -48,29 +39,30 @@ def create_app(test_config=None):
 
   # GET actors
   @app.route('/actors')
-  @requires_auth('get:actors')
   def get_actors():
-    result = Actors.query.order_by(Actors.id).all()
-    current_actors = paginate_actors(request, result)
+    all_actors = Actors.query.order_by(Actors.id).all()
+    format_actors = [actor.format() for actor in all_actors]
+    
 
-    if len(current_actors) == 0:
+    if len(all_actors) == 0:
       abort(404)
 
     return jsonify({
       'success': True,
-      'actors': current_actors
+      'actors': format_actors
     })
 
   # DELETE actors
   @app.route('/actors/<int:actor_id>', methods=['DELETE'])
-  def delete_actor(payload, actor_id):
+  @requires_auth('delete:actors')
+  def delete_actor(jwt, actor_id):
     try:
       actor = Actors.query.filter(Actors.id==actor_id).one_or_none()
       if actor_id is None: 
         abort(404)
       actor.delete()
 
-      return json({
+      return jsonify({
         'success': True,
         'deleted': actor_id
       })
@@ -80,7 +72,7 @@ def create_app(test_config=None):
   # POST actors
   @app.route('/actors', methods=['POST'])
   @requires_auth('post:actors')
-  def add_actor(payload):
+  def add_actor(jwt):
     body = request.get_json() # Get the data from the entry fields
 
     new_name = body.get('name', None)
@@ -106,7 +98,8 @@ def create_app(test_config=None):
   # PATCH actors
   @app.route('/actors/<int:actor_id>', methods=['PATCH'])
   @requires_auth('patch:actors')
-  def update_actor(payload, actor_id):
+  def update_actor(jwt, actor_id):
+    
     body = request.get_json()
 
     new_name = body.get('name', None)
@@ -118,6 +111,7 @@ def create_app(test_config=None):
 
     try:
       actor = Actors.query.filter(Actors.id==actor_id).one_or_none()
+      actor_formatted = actor.format()
       
       actor.name = new_name
       actor.age = new_age
@@ -137,15 +131,16 @@ def create_app(test_config=None):
   # GET movies
   @app.route('/movies')
   def get_movies():
-    result = Movies.query.order_by(Movies.id).all()
-    current_movies = paginate_movies(request, result)
+    all_movies = Movies.query.order_by(Movies.id).all()
+    format_actors = [actor.format() for actor in all_movies]
+  
 
-    if len(current_movies) == 0:
+    if len(all_movies) == 0:
       abort(404)
 
     return jsonify({
       'success': True,
-      'movies': current_movies
+      'movies': format_actors
     })
 
   # DELETE movies
@@ -158,7 +153,7 @@ def create_app(test_config=None):
         abort(404)
       movie.delete()
 
-      return json({
+      return jsonify({
         'success': True,
         'deleted': movie_id
       }), 200
@@ -235,17 +230,17 @@ def create_app(test_config=None):
         }), 422
 
   @app.errorhandler(AuthError)
-  def server_error(error):
+  def auth_error(auth_error):
       return jsonify({
           "success": False,
-          "error": error.code,
-          "message": error.description
-      }), error.status_code
+          "error": auth_error.status_code,
+          "message": auth_error.error['description']
+      }), 401
 
 
   return app
 
-APP = create_app()
+app = create_app()
 
 if __name__ == '__main__':
-    APP.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
