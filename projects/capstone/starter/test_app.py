@@ -16,9 +16,16 @@ class CapstoneTestCase(unittest.TestCase):
         self.client = self.app.test_client
         self.database_name = "capstone"
         self.database_path = "postgresql://{}/{}".format('localhost:5432', self.database_name)
-        self.token_cd = os.environ['TOKEN_CD']
-        self.token_e = os.environ['TOKEN_E']
+        self.token_cd = os.environ['TOKEN_CD'] # Authorization token for casting director
+        self.token_e = os.environ['TOKEN_E'] # Authorization token for executive
         setup_db(self.app, self.database_path)
+
+        self.cd_headers = {
+            "Authorization": self.token_cd
+        }
+        self.e_headers = {
+            "Authorization": self.token_e
+        }
 
         # binds the app to the current context
         with self.app.app_context():
