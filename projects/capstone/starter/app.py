@@ -58,6 +58,7 @@ def create_app(test_config=None):
   def delete_actor(jwt, actor_id):
     try:
       actor = Actors.query.filter(Actors.id==actor_id).one_or_none()
+      
       if actor_id is None: 
         abort(404)
       actor.delete()
