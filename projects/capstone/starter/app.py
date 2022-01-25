@@ -214,7 +214,7 @@ def create_app(test_config=None):
 
   # Error handlers
   # -----------------------------------------------------------------
-  @app.errorhandler(404)
+  @app.
   def not_found(error):
       return jsonify({
           "success": False,
@@ -222,7 +222,7 @@ def create_app(test_config=None):
           "message": "resource not found"
         }), 404
 
-  @app.errorhandler(422)
+  @app.
   def unprocessable(error):
       return jsonify({
           "success": False,
@@ -230,7 +230,7 @@ def create_app(test_config=None):
           "message": "unprocessable"
         }), 422
 
-  @app.errorhandler(AuthError)
+  @app.
   def auth_error(error):
       return jsonify({
           "success": False,
