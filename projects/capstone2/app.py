@@ -154,6 +154,22 @@ def create_app(test_config=None):
         'movies': format_movies
         })
 
+    # GET movie with id "movie_id"
+    @app.route('/movies/<int:movie_id>')
+    def get_movie(movie_id):
+        try:
+            movie = Movies.query.filter(Movies.id==movie_id).one_or_none()
+            
+            if movie is None:
+                 abort(404)
+
+            return jsonify({
+                'success': True,
+                'movie': movie_id
+            })
+        except AuthError:
+            abort(422)
+
     # DELETE movies
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
     @requires_auth('delete:movies')
@@ -171,6 +187,61 @@ def create_app(test_config=None):
         except:
             abort(422)
 
+    # PATCH movies
+    @app.route('/movies/<int:movie_id>', methods=['PATCH'])
+    @requires_auth('patch:movies')
+    def update_movie(payload, movie_id):
+        body = request.get_json()
+
+        new_title = body.get('title', None)
+        new_release_date = body.get('release_date', None)
+
+        if new_title is None and new_release_date is None:
+            abort(422)
+
+        try:
+            movie = Movies.query.filter(Movies.id==movie_id).one_or_none()
+            
+            movie.title = new_title
+            movie.age = new_release_date
+
+            movie.update()
+
+            return jsonify({
+                'success': True,
+                'updated': movie_id
+            }), 200
+        except AuthError:
+            abort(422)
+
+    # POST movie
+    @app.route('/movies', methods=['POST'])
+    @requires_auth('post:movies')
+    def add_movie(payload):
+        body = request.get_json() # Get the data from the entry fields
+
+        new_title = body.get('title', None)
+        new_release_date = body.get('release_date', None)
+
+        try:
+            movie = Movies(
+                title = new_title,
+                release_date = new_release_date
+            )
+            movie.insert()
+
+            return jsonify({
+                'success': True,
+                'created': movie.id,
+                'total_movies': len(Movies.query.all())
+            }), 200
+        except AuthError:
+            abort(422)
+
+
+
+
+
     # ERROR HANDLERS
     # ________________________________________________________________            
     @app.errorhandler(AuthError)
@@ -180,6 +251,14 @@ def create_app(test_config=None):
             "error": error.status_code,
             "message": error.__dict__
         }),error.status_code
+
+    @app.errorhandler(401)
+    def not_found(error):
+        return jsonify({
+            "success": False,
+            "error": 404,
+            "message": "authentication error"
+        }), 401   
 
     @app.errorhandler(404)
     def not_found(error):
