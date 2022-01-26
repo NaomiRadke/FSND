@@ -176,7 +176,7 @@ def create_app(test_config=None):
     def delete_movie(payload, movie_id):
         try:
             movie = Movies.query.filter(Movies.id==movie_id).one_or_none()
-            if movie_id is None: 
+            if movie is None: 
                 abort(404)
             movie.delete()
 
@@ -193,11 +193,8 @@ def create_app(test_config=None):
     def update_movie(payload, movie_id):
         body = request.get_json()
 
-        new_title = body.get('title', None)
-        new_release_date = body.get('release_date', None)
-
-        if new_title is None and new_release_date is None:
-            abort(422)
+        new_title = body.get('title')
+        new_release_date = body.get('release_date')
 
         try:
             movie = Movies.query.filter(Movies.id==movie_id).one_or_none()

@@ -14,8 +14,8 @@ class CapstoneTestCase(unittest.TestCase):
         self.database_name = "capstone_test"
         self.database_path = "postgresql://{}/{}".format('localhost:5432', self.database_name)
         
-        self.token_cd = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InVtd2J5S05DRklKMThIWXJZaDNyYSJ9.eyJpc3MiOiJodHRwczovL2Rldi11MWJ2YXp0OS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjFkZGE5NzRhZTI5YjMwMDc2NDU3MTNkIiwiYXVkIjoiY2Fwc3RvbmVfaW1hZ2UiLCJpYXQiOjE2NDMxMDc1NjEsImV4cCI6MTY0MzE3OTU2MSwiYXpwIjoibElQVU1YVjBhaHNGNWFRcmdZeGk2NThCZTNGbUZKZnAiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyJdfQ.0maau4yrv9TTfu1eFPq2q5ljpo3chyQH_kN_ZX5AQQo59_fasgnlZK1X6f9KZ28BRbFjiwdgcn5NYKTYIhJwOoqD96WjfxGaZvNtgGinAWRfGtfJRn2rI72LRQnkUoy57LW8nIWjwTFXUL5g3ZKSCfT0fH0JPUfbMPMiYfgwPb4_0-RAy3n4VO8htlDk9Yn_FzYofX5l_XgEBt8x6Iuzoxn7VMZ5gMX0jn0dcGhNNYI-G4hdAgSqAP9-oPQDoaqAFYCXnlIfKDWY5sHWELGCYF5hv5ZwcGGveL2qSFEbsoB1zsYGJV1wZ-B1Epr-DDsLs4j_4m6MBAgNPp0SOLuLPQ'
-        self.token_e = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InVtd2J5S05DRklKMThIWXJZaDNyYSJ9.eyJpc3MiOiJodHRwczovL2Rldi11MWJ2YXp0OS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjFkZGE4ODNkMTg4ZDgwMDZlYTQ5YTg1IiwiYXVkIjoiY2Fwc3RvbmVfaW1hZ2UiLCJpYXQiOjE2NDMxMDc0NzYsImV4cCI6MTY0MzE3OTQ3NiwiYXpwIjoibElQVU1YVjBhaHNGNWFRcmdZeGk2NThCZTNGbUZKZnAiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwicGF0Y2g6YWN0b3JzIiwicGF0Y2g6bW92aWVzIiwicG9zdDphY3RvcnMiLCJwb3N0Om1vdmllcyJdfQ.Gu0l-BmAEruBftqfdblcX7bi10KokSmMDsDcPyFeBTDiGZzTLU-4lNxqnO_JiaUk3JzxMiQy0BEe8a5uidjPvJBT_-68RfX7HaAK2a4yYhRqyJyCaMu7vKKKQx-zD04jgP1YbxWXCr25kvXoCh5gEGHv-njSpRCkDwdPXxbxMBTRop0xo2ssjHlKL_94hTiwYN9KfwK5ju_E2Oa5TiH7H0-yrPQbe9vrswwXaDlXSvyUjP_FCwfcQZyJo3dg0x2hsPoT-Y71zvjuFb_uHlq56ls7W6rdLdgrN9-W9p4QDPMIdghVl31mIacc8kXkjI6X3ty2bq37D5wnUcAnPwGpLw"
+        self.token_cd = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InVtd2J5S05DRklKMThIWXJZaDNyYSJ9.eyJpc3MiOiJodHRwczovL2Rldi11MWJ2YXp0OS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjFkZGE5NzRhZTI5YjMwMDc2NDU3MTNkIiwiYXVkIjoiY2Fwc3RvbmVfaW1hZ2UiLCJpYXQiOjE2NDMxODgzMDEsImV4cCI6MTY0MzI2MDMwMSwiYXpwIjoibElQVU1YVjBhaHNGNWFRcmdZeGk2NThCZTNGbUZKZnAiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyJdfQ.3562o-NuycOAX9WznfP7zp9TGK5SLS_fqNSZO8FW9nXOFDDMDjH_EYNFH5M1q8xiYezmdq8PuRbYYZJx64INvSHwvqyx1AFs0YpKd1HRaDhQozYtVWAyWCsJYb-QeZAfs3nsAsKvKUAvybB-QmP-Lw2Y4N3SnYUwgEXLr7LuT0sJR1qV50CRw2j6kfK5xt1mDIK1Wv46ngvvKhvdUDaFIIt53JmoVhDdCRHzt3J2rJx8-LurVdtQfO8BWU3UQmG8rMahFCD0-4nZOcUifFkLz35tYbtoCzxaj4O9MOnHeuk0XwZqAgKIJg8vn9a6f4n9NpONldeNWeh19albj6zBjQ'
+        self.token_e = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InVtd2J5S05DRklKMThIWXJZaDNyYSJ9.eyJpc3MiOiJodHRwczovL2Rldi11MWJ2YXp0OS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjFkZGE4ODNkMTg4ZDgwMDZlYTQ5YTg1IiwiYXVkIjoiY2Fwc3RvbmVfaW1hZ2UiLCJpYXQiOjE2NDMxODgxOTUsImV4cCI6MTY0MzI2MDE5NSwiYXpwIjoibElQVU1YVjBhaHNGNWFRcmdZeGk2NThCZTNGbUZKZnAiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwicGF0Y2g6YWN0b3JzIiwicGF0Y2g6bW92aWVzIiwicG9zdDphY3RvcnMiLCJwb3N0Om1vdmllcyJdfQ.XGqmkwfu0UpBSciN7AZRGLk46V4v_fWvJJDOVLpINzF7I3ZekDsFlvioYWSGXgCjLcDk1pIfSNjT_YMvrZONGKnbKjT5LbOVQBsGEyuap5CJbNM4uVDrQ8ik5tUmVG2sHWSY4G7jHThv6Jw8mkE8tB9DFVFb8s4Auev8Q9QaoBZy0gob9Oug3i2f5dBD9cCfGHfJj7AcIomattZ2L79A0256hcgTnMwTAMibj8U_p7oyWESCQ2b3WYaSjHEPR5EtnEs_P4W3GotJOtwYwrwzWy3OziaaHIGJfBmg7tUFNWtIOJDHbYjReHfxUyXP7_dk24R_HS9aMsvOoXEptxU9ow"
         
         setup_db(self.app, self.database_path)
 
@@ -100,7 +100,7 @@ class CapstoneTestCase(unittest.TestCase):
         self.assertTrue(data['total_actors'])
 
     def test_422_actor_unprocessable(self):
-        res = self.client().post('/actors', json={'name': 'Hello Kitty', 'age': True, 'gender': 'f'}, headers={'Authorization': self.token_cd})
+        res = self.client().post('/actors', json={'age': 9, 'gender': 'f'}, headers={'Authorization': self.token_cd})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
@@ -158,15 +158,15 @@ class CapstoneTestCase(unittest.TestCase):
 
     # Delete movie with id 'movie_id'
     def test_delete_movie(self):
-        res = self.client().delete('/movies/10', headers={'Authorization': format(self.token_e)}) 
+        res = self.client().delete('/movies/8', headers={'Authorization': format(self.token_e)}) 
         data = json.loads(res.data)
 
-        movie = Movies.query.filter(Movies.id == 7).one_or_none() # Check that the movie is no longer in the database
+        movie = Movies.query.filter(Movies.id == 8).one_or_none() # Check that the movie is no longer in the database
         
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['deleted'])
-        self.assertEqual(movie, None) # Check that actor no longer exists
+        self.assertEqual(movie, None) # Check that movie no longer exists
 
     def test_404_movie_does_not_exist(self):
 
@@ -179,7 +179,7 @@ class CapstoneTestCase(unittest.TestCase):
 
     # Post a new movie
     def test_post_movie(self):
-        res = self.client().post('/movies', json={'title': 'Brave New World', 'release_date': '1980-05-04 00:00:00'}, headers={'Authorization': self.token_cd})
+        res = self.client().post('/movies', json={'title': 'Brave New World', 'release_date': '1980-05-04 00:00:00'}, headers={'Authorization': self.token_e})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -197,7 +197,7 @@ class CapstoneTestCase(unittest.TestCase):
 
     # Patch a movie with id 'movie_id'
     def test_patch_movie(self):
-        res = self.client().patch('/movies/8', json={'title': 'This is new!', 'release_date': '1980-05-04 00:00:00'}, headers={'Authorization': self.token_e})
+        res = self.client().patch('/movies/9', json={'title': 'This is new!', 'release_date': '1980-05-04 00:00:00'}, headers={'Authorization': self.token_e})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -205,7 +205,7 @@ class CapstoneTestCase(unittest.TestCase):
         self.assertTrue(data['updated'])
 
     def test_422_no_data(self):
-        res = self.client().patch('/movies/9', headers={'Authorization': self.token_e})
+        res = self.client().patch('/movies/9', json={'name': 'nobody'}, headers={'Authorization': self.token_e})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
