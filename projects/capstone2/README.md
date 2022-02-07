@@ -57,9 +57,12 @@ python3 app.py # run the app
 
 ## API endpoints
 The API has the following endpoints to query, extend, update and delete the actor and movie data.
+Except for the GET endpoints, all endpoins require authentication.
+The Bearer Tokens that can be used in the curl requests (see 'samples' for each endpoint) can be found in `setup.sh`.
 
 ### GET /actors
 * Fetches a list of all actors in the database by id, name, age and gender
+* Sample: `curl https://capstoneproject79117.herokuapp.com/actors`
 * Expected return format:
 ````
 {
@@ -103,6 +106,7 @@ The API has the following endpoints to query, extend, update and delete the acto
 ### GET /actors/<int:actor_id>
 * Fetches an actor of a certain id
 * Returns its id, name, age and gender
+* Sample: `curl https://capstoneproject79117.herokuapp.com/actors/1`
 * Expected return format:
 
 ````
@@ -149,6 +153,10 @@ The API has the following endpoints to query, extend, update and delete the acto
     "gender": "F"
 }
 ````
+* Sample: `curl --request POST https://capstoneproject79117.herokuapp.com/actors \
+-d '{"name":"Hello Kitty","age":20,"gender":"F"}' \
+-H "Content-Type: application/json" \
+-H "Authorization: $TOKEN_CD"`
 * Expected return format:
 ````
 {
@@ -160,6 +168,7 @@ The API has the following endpoints to query, extend, update and delete the acto
 
 ### GET /movies
 * Fetches a list of all movies in the database by id, title and release date
+* Sample: `curl https://capstoneproject79117.herokuapp.com/movies`
 * Expected return format:
 ````
 {
@@ -188,6 +197,7 @@ The API has the following endpoints to query, extend, update and delete the acto
 ### GET /movies/<int:movie_id>
 * Fetches a movie of a certain id
 * Returns its id, title and release date
+* Sample: `curl https://capstoneproject79117.herokuapp.com/movies/2`
 * Expected return format:
 
 ````
@@ -232,6 +242,12 @@ The API has the following endpoints to query, extend, update and delete the acto
     "release_date": "1980-05-04 00:00:00"
 }
 ````
+* Sample:
+`curl --request POST https://capstoneproject79117.herokuapp.com/movies \
+-d '{"title":"The Lakes","release_date":"2019-04-04 00:00:00"}' \
+-H "Content-Type: application/json" \
+-H "Authorization: $TOKEN_E"`
+
 * Expected return format:
 ````
 {
