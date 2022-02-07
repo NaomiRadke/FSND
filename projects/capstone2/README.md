@@ -124,6 +124,11 @@ The Bearer Tokens that can be used in the curl requests (see 'samples' for each 
 
 ### PATCH /actors/<int:actor_id>
 * Updates an actor database entry of a given id
+* Sample: `curl --request PATCH https://capstoneproject79117.herokuapp.com/actors/1 \
+-d '{"name":"Jane Austen","age":76,"gender":"F"}' \
+-H "Content-Type: application/json" \
+-H "Authorization: $TOKEN_CD"`
+
 * Expected return format:
 ````
 {
@@ -134,6 +139,8 @@ The Bearer Tokens that can be used in the curl requests (see 'samples' for each 
 
 ### DELETE /actors/<int:actor_id>
 * Deletes an actor database entry of a given id
+* Sample: `curl --request DELETE https://capstoneproject79117.herokuapp.com/actors/1 \
+-H "Authorization: $TOKEN_CD"`
 * Expected return format:
 ````
 {
@@ -214,6 +221,11 @@ The Bearer Tokens that can be used in the curl requests (see 'samples' for each 
 
 ### PATCH /movies/<int:movie_id>
 * Updates a movie database entry of a given id
+* Sample: `curl --request PATCH https://capstoneproject79117.herokuapp.com/movies/1 \
+-d '{"title":"Wild West","release_date":"2017-04-02 00:00:00"}' \
+-H "Content-Type: application/json" \
+-H "Authorization: $TOKEN_E"`
+
 * Expected return format:
 ````
 {
@@ -224,6 +236,8 @@ The Bearer Tokens that can be used in the curl requests (see 'samples' for each 
 
 ### DELETE /movies/<int:movie_id>
 * Deletes a movie database entry of a given id
+* Sample: `curl --request DELETE https://capstoneproject79117.herokuapp.com/movies/1 \
+-H "Authorization: $TOKEN_E"`
 * Expected return format:
 ````
 {
