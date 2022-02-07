@@ -5,6 +5,7 @@ The API can either be accessed via an external URL or run locally. Both alternat
 
 
 ## URL for the hosted API
+https://capstoneproject79117.herokuapp.com/
 
 ## Run the app locally
 In case you would like to run the app locally, please follow these steps:
