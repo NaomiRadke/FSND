@@ -57,7 +57,7 @@ def create_app(test_config=None):
 
             return jsonify({
                 'success': True,
-                'actor': actor_id
+                'actor': [actor.serialized]
             })
         except AuthError:
             abort(422)
@@ -165,7 +165,7 @@ def create_app(test_config=None):
 
             return jsonify({
                 'success': True,
-                'movie': movie_id
+                'movie': [movie.serialized]
             })
         except AuthError:
             abort(422)
@@ -193,8 +193,10 @@ def create_app(test_config=None):
     def update_movie(payload, movie_id):
         body = request.get_json()
 
-        new_title = body.get('title')
-        new_release_date = body.get('release_date')
+        new_title = body.get('title', None)
+        new_release_date = body.get('release_date', None)
+        if new_title is None and new_release_date is None:
+            abort(422)
 
         try:
             movie = Movies.query.filter(Movies.id==movie_id).one_or_none()
@@ -253,7 +255,7 @@ def create_app(test_config=None):
     def not_found(error):
         return jsonify({
             "success": False,
-            "error": 404,
+            "error": 401,
             "message": "authentication error"
         }), 401   
 

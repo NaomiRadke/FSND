@@ -51,6 +51,16 @@ class Actors(db.Model):
       'age': self.age,
       'gender': self.gender}
 
+  # Add serialized property to be able to return a json for each category in app.py
+  @property
+  def serialized(self):
+      return {
+          'id': self.id,
+          'name': self.name,
+          'age': self.age,
+          'gender': self.gender
+      }
+
 class Movies(db.Model):  
   __tablename__ = 'movies'
 
@@ -78,5 +88,14 @@ class Movies(db.Model):
   def format(self):
     return {
       'id': self.id,
-      'name': self.title,
-      'age': self.release_date}
+      'title': self.title,
+      'release_date': self.release_date}
+
+  # Add serialized property to be able to return a json for each category in app.py
+  @property
+  def serialized(self):
+      return {
+          'id': self.id,
+          'title': self.title,
+          'release_date': self.release_date
+      }
