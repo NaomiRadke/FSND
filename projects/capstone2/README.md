@@ -52,8 +52,7 @@ Set the environment variables and run the server:
 chmod +x setup.sh # make setup.sh executable
 source setup.sh # set the environment variables
 python3 app.py # run the app
-
-
+````
 
 ## API endpoints
 The API has the following endpoints to query, extend, update and delete the actor and movie data.
