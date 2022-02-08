@@ -6,9 +6,10 @@ from jose import jwt
 from urllib.request import urlopen
 from flask import request, _request_ctx_stack, abort
 
-AUTH0_DOMAIN = 'dev-u1bvazt9.us.auth0.com'
-ALGORITHMS = ['RS256']
-API_AUDIENCE = 'capstone_image'
+AUTH0_DOMAIN = os.environ['AUTH0_DOMAIN']
+ALGORITHMS = os.environ['AUTH0_ALGORITHMS']
+API_AUDIENCE = os.environ['API_AUDIENCE']
+
 
 # AuthError Exception
 class AuthError(Exception):
